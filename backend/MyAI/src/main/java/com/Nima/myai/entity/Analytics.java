@@ -1,4 +1,5 @@
 package com.Nima.myai.entity;
+
 import javax.persistence.*;
 import lombok.*;
 
