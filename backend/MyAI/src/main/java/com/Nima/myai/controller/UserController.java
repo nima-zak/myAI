@@ -4,19 +4,27 @@ import com.Nima.myai.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import com.Nima.myai.exception.EmailAlreadyExistsException;
+import com.Nima.myai.repository.UserRepository;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/api/users")
 public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserRepository userRepository;
 
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody User user) {
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new EmailAlreadyExistsException("Email already exists");
+        }
+
         User savedUser = userService.save(user);
         return ResponseEntity.ok(savedUser);
     }
