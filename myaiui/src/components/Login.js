@@ -4,7 +4,6 @@ import axios from "axios";
 import UserContext from "../contexts/UserContext";
 // import { authHeader } from "../api";
 
-
 const Login = () => {
   const { setLoggedInUser } = useContext(UserContext);
   const [email, setEmail] = useState("");
@@ -13,23 +12,25 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const authHeader = {
-        headers: {
-          Authorization: "Basic " + btoa(`${email}:${password}`),
-        },
-      };
-
-      const response = await axios.post("http://localhost:8080/api/login", {}, authHeader);
-
-      if (response.status === 200) {
-        // Login successful
-        setLoggedInUser(response.data);
-        alert("Login successful");
-      } else {
-        // Handle login error
-        console.error("Error during login:", response.status);
-        alert("Email or Password is wrong");
-      }
+      axios
+        .post("http://localhost:8080/api/login", {
+          username: email,
+          password: password,
+        })
+        .then((response) => {
+          console.log(response);
+          // if (response.status === 200) {
+          //   // Login successful
+          //   console.log(response)
+          //   localStorage.setItem("token", response.data)
+          //   setLoggedInUser(response.data);
+          //   alert("Login successful");
+          // } else {
+          //   // Handle login error
+          //   console.error("Error during login:", response.status);
+          //   alert("Email or Password is wrong");
+          // }
+        });
     } catch (error) {
       console.error("Error during login:", error.message);
     }
